@@ -8,6 +8,9 @@ public class Block {
     LinkedList<Transaction> transactionList;
     long timestamp;
     String hashPreviousBlock;
+
+
+    Block previousBlock;
     String hashBlock;
 
     //Block parameters are set through the ConcreteBlockBuilder
@@ -15,6 +18,8 @@ public class Block {
         transactionList = new LinkedList<>();
     }
 
+
+    //used to generate Hash of Block
     public String toString(){
 
         String paramtersAsString = uniqueID+transactionList.toString()+timestamp+hashPreviousBlock;
@@ -22,6 +27,13 @@ public class Block {
 
     }
 
+    //Prints out block info for the Test requirement of HyperSkill
+    public void printBlock(){
+        System.out.println("Block:");
+        System.out.printf("Id: %s%n",getUniqueID());
+        System.out.printf("Hash of the previous block:%n%s%n",getHashPreviousBlock());
+        System.out.printf("Hash of the block:%n%s%n",getHashBlock());
+    }
 
     //Getter and Setter
     public String getUniqueID() {
@@ -63,4 +75,15 @@ public class Block {
     public void setHashBlock(String hashBlock) {
         this.hashBlock = hashBlock;
     }
+
+    public Block getPreviousBlock() {
+        return previousBlock;
+    }
+
+    public void setPreviousBlock(Block previousBlock) {
+        this.previousBlock = previousBlock;
+    }
+
+
+
 }

@@ -23,7 +23,13 @@ public class ConcreteBlockBuilder implements BlockBuilder {
     }
 
     @Override
-    public void buildHashOfPreviousBlock() {
+    public void buildHashOfPreviousBlock(Block previousBlock) {
+        if(previousBlock != null) {
+            block.setHashPreviousBlock(previousBlock.getHashBlock());
+        }
+        else {
+            block.setHashPreviousBlock("0");
+        }
 
     }
 
@@ -39,5 +45,31 @@ public class ConcreteBlockBuilder implements BlockBuilder {
 
     public void reset(){
         block = new Block();
+    }
+
+    public void buildID(Block previousBlock) {
+
+        if(previousBlock != null) {
+            block.setUniqueID(""+Integer.parseInt(previousBlock.getUniqueID()+1));
+        }
+        else {
+            block.setUniqueID(""+1);
+        }
+
+        ;
+
+
+    }
+
+    @Override
+    public void buildPreviousBlock(Block previousBlock) {
+        if(previousBlock == null){
+            block.setHashPreviousBlock("0");
+        }
+        else {
+            block.setHashPreviousBlock(HashUtil.applySha256(previousBlock.toString()));
+        }
+
+        block.setPreviousBlock(previousBlock);
     }
 }
