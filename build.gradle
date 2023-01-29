@@ -30,8 +30,6 @@ subprojects {
 
     dependencies {
         testImplementation 'com.github.hyperskill:hs-test:release-SNAPSHOT'
-        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     }
 
     configurations.all {
@@ -46,7 +44,6 @@ subprojects {
     test {
         systemProperty "file.encoding", "utf-8"
         outputs.upToDateWhen { false }
-        useJUnitPlatform()
     }
 
     compileJava.options.encoding = 'utf-8'

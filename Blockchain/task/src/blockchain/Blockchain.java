@@ -1,12 +1,15 @@
 package blockchain;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.LinkedList;
 
-public class Blockchain {
-
+public class Blockchain implements Serializable {
+    private static final long serialVersionUID = 1L;
     LinkedList<Block> listOfBlocks;
     Block headBlock;
-    BlockDirector director;
+    transient BlockDirector director;
 
     Blockchain(){
         this.listOfBlocks = new LinkedList<>();
@@ -46,6 +49,41 @@ public class Blockchain {
             return true;
         }
         else return false;
+    }
+
+    //Serialization Functions
+
+    private void writeObject(ObjectOutputStream oos) throws Exception {
+        oos.defaultWriteObject();
+
+    }
+
+    private void readObject(ObjectInputStream ois) throws Exception {
+        ois.defaultReadObject();
+        this.director = new BlockDirector();
+    }
+    //Memento functions set and get state
+
+    public BlockchainState getState(){
+        return new BlockchainState(listOfBlocks, headBlock);
+    }
+
+    public void setState(BlockchainState state) {
+        this.listOfBlocks = new LinkedList<>(state.listOfBlocks);
+        this.headBlock = state.headBlock;
+    }
+
+
+
+    //Memento Functions: State Object
+    class BlockchainState {
+        private final LinkedList<Block> listOfBlocks;
+        private final Block headBlock;
+
+        BlockchainState(LinkedList<Block> listOfBlocks, Block headBlock) {
+            this.listOfBlocks = listOfBlocks;
+            this.headBlock = headBlock;
+        }
     }
 
 
