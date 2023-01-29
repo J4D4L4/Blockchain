@@ -12,6 +12,11 @@ public class Block {
 
     Block previousBlock;
     String hashBlock;
+    int magicNumber;
+
+
+
+    int timeNeededToCreate;
 
     //Block parameters are set through the ConcreteBlockBuilder
     Block(){
@@ -22,7 +27,7 @@ public class Block {
     //used to generate Hash of Block
     public String toString(){
 
-        String paramtersAsString = uniqueID+transactionList.toString()+timestamp+hashPreviousBlock;
+        String paramtersAsString = uniqueID+transactionList.toString()+timestamp+hashPreviousBlock+magicNumber;
         return paramtersAsString;
 
     }
@@ -33,6 +38,7 @@ public class Block {
         System.out.printf("Id: %s%n",getUniqueID());
         System.out.printf("Hash of the previous block:%n%s%n",getHashPreviousBlock());
         System.out.printf("Hash of the block:%n%s%n",getHashBlock());
+        System.out.printf("Block was generating for %d seconds", getTimeNeededToCreate() );
     }
 
     //Getter and Setter
@@ -82,6 +88,21 @@ public class Block {
 
     public void setPreviousBlock(Block previousBlock) {
         this.previousBlock = previousBlock;
+    }
+    public int getMagicNumber() {
+        return magicNumber;
+    }
+
+    public void setMagicNumber(int magicNumber) {
+        this.magicNumber = magicNumber;
+    }
+
+    public int getTimeNeededToCreate() {
+        return timeNeededToCreate;
+    }
+
+    public void setTimeNeededToCreate(int timeNeededToCreate) {
+        this.timeNeededToCreate = timeNeededToCreate;
     }
 
 

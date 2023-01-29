@@ -1,7 +1,9 @@
 package blockchain;
 
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ConcreteBlockBuilder implements BlockBuilder {
 
@@ -39,8 +41,17 @@ public class ConcreteBlockBuilder implements BlockBuilder {
     }
 
     @Override
-    public void buildHash() {
-        block.setHashBlock(HashUtil.applySha256(block.toString()));
+    public void buildHash(int numberOfZero) {
+        String prelimHash;
+
+        while (true) {
+            block.magicNumber = ThreadLocalRandom.current().nextInt(0,  99999999+ 1);
+            prelimHash = HashUtil.applySha256(block.toString());
+            int startsWithZeros = prelimHash.length() - prelimHash.replaceAll("^0+", "").length();
+            if (startsWithZeros>=numberOfZero) break;
+        }
+
+        block.setHashBlock(prelimHash);
     }
 
     public void reset(){
@@ -50,7 +61,7 @@ public class ConcreteBlockBuilder implements BlockBuilder {
     public void buildID(Block previousBlock) {
 
         if(previousBlock != null) {
-            block.setUniqueID(""+Integer.parseInt(previousBlock.getUniqueID()+1));
+            block.setUniqueID(""+(Integer.parseInt(previousBlock.getUniqueID())+1));
         }
         else {
             block.setUniqueID(""+1);
@@ -71,5 +82,9 @@ public class ConcreteBlockBuilder implements BlockBuilder {
         }
 
         block.setPreviousBlock(previousBlock);
+    }
+
+    public void setTimeNeededToCreate(int time){
+        block.timeNeededToCreate = time;
     }
 }

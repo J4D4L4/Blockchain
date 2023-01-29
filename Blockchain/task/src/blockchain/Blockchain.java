@@ -16,16 +16,16 @@ public class Blockchain implements Serializable {
         this.director = new BlockDirector();
     }
 
-    public void addBlock(){
+    public void addBlock(int nrOfZero){
 
         if (listOfBlocks.size() == 0) {
-            Block newBlock = director.makeBlock(null);
+            Block newBlock = director.makeBlock(null,nrOfZero);
             listOfBlocks.add(newBlock);
             headBlock = newBlock;
         }
         else{
 
-            Block newBlock = director.makeBlock(headBlock);
+            Block newBlock = director.makeBlock(headBlock,nrOfZero);
             listOfBlocks.add(newBlock);
             headBlock = newBlock;
         }
