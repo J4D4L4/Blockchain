@@ -13,14 +13,22 @@ public class Block {
     Block previousBlock;
     String hashBlock;
     int magicNumber;
+    String createdByMiner;
+
+
+
+    int diffcultyWhileCreated;
 
 
 
     int timeNeededToCreate;
+    boolean interrupt;
 
     //Block parameters are set through the ConcreteBlockBuilder
     Block(){
+
         transactionList = new LinkedList<>();
+
     }
 
 
@@ -35,10 +43,15 @@ public class Block {
     //Prints out block info for the Test requirement of HyperSkill
     public void printBlock(){
         System.out.println("Block:");
+        System.out.printf("Created by miner #%s%n", getCreatedByMiner());
         System.out.printf("Id: %s%n",getUniqueID());
+        System.out.printf("Timestamp: %s%n",getTimestamp());
+        System.out.printf("Magic number: %s%n",getMagicNumber());
         System.out.printf("Hash of the previous block:%n%s%n",getHashPreviousBlock());
         System.out.printf("Hash of the block:%n%s%n",getHashBlock());
-        System.out.printf("Block was generating for %d seconds", getTimeNeededToCreate() );
+        System.out.printf("Block was generating for %d seconds%n", getTimeNeededToCreate() );
+        System.out.printf("N was increased to %s%n", getDiffcultyWhileCreated()+1 );
+        System.out.println("");
     }
 
     //Getter and Setter
@@ -105,6 +118,21 @@ public class Block {
         this.timeNeededToCreate = timeNeededToCreate;
     }
 
+    public String getCreatedByMiner() {
+        return createdByMiner;
+    }
+
+    public void setCreatedByMiner(String createdByMiner) {
+        this.createdByMiner = createdByMiner;
+    }
+
+    public int getDiffcultyWhileCreated() {
+        return diffcultyWhileCreated;
+    }
+
+    public void setDiffcultyWhileCreated(int diffcultyWhileCreated) {
+        this.diffcultyWhileCreated = diffcultyWhileCreated;
+    }
 
 
 }

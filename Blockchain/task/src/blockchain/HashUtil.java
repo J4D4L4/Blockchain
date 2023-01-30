@@ -19,4 +19,9 @@ public class HashUtil {
 
         }
     }
+
+    public static int startsWithXZero(String string) {
+        int length = string.length() - string.replaceAll("^0+", "").length();
+        return length;
+    }
 }

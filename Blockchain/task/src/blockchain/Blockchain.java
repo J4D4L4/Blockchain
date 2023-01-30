@@ -4,32 +4,68 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.LinkedList;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+//singleton
 public class Blockchain implements Serializable {
     private static final long serialVersionUID = 1L;
     LinkedList<Block> listOfBlocks;
-    Block headBlock;
+    static Block headBlock = null;
     transient BlockDirector director;
+    int difficulty = 0;
+    //singleton instance
+    private static Blockchain instance = new Blockchain();
+    Observer minerObservers;
+    ReadWriteLock lock = new ReentrantReadWriteLock();
 
-    Blockchain(){
+
+    private Blockchain(){
         this.listOfBlocks = new LinkedList<>();
         this.director = new BlockDirector();
+        this.minerObservers = new Observer();
+        difficulty = 0;
     }
 
-    public void addBlock(int nrOfZero){
-
-        if (listOfBlocks.size() == 0) {
-            Block newBlock = director.makeBlock(null,nrOfZero);
-            listOfBlocks.add(newBlock);
-            headBlock = newBlock;
+    //singleton functions
+    public static Blockchain getInstance() {
+        if (instance == null) {
+            instance = new Blockchain();
         }
-        else{
+        return instance;
+    }
 
-            Block newBlock = director.makeBlock(headBlock,nrOfZero);
-            listOfBlocks.add(newBlock);
-            headBlock = newBlock;
+
+
+    public synchronized boolean addBlock(Block block){
+        try {
+            lock.writeLock().lock();
+            if (listOfBlocks.size() > 0) {
+                if (HashUtil.startsWithXZero(block.hashBlock) >= difficulty && block.getHashPreviousBlock().equals(headBlock.getHashBlock())) {
+
+                    listOfBlocks.add(block);
+                    headBlock = block;
+                    if(difficulty == block.diffcultyWhileCreated) determineNewDifficulty(block);
+                    lock.writeLock().unlock();
+                    //minerObservers.notify(Event.NEWBLOCK);
+                    return true;
+                }
+
+            } else if (HashUtil.startsWithXZero(block.hashBlock) >= difficulty && headBlock == null) {
+
+                listOfBlocks.add(block);
+                headBlock = block;
+                if(difficulty == block.diffcultyWhileCreated) determineNewDifficulty(block);
+                lock.writeLock().unlock();
+                //minerObservers.notify(Event.NEWBLOCK);
+                return true;
+            }
+            lock.writeLock().unlock();
         }
-
+        catch (NullPointerException r){
+            return false;
+        }
+        return false;
     }
 
     public boolean validateChain(){
@@ -49,6 +85,15 @@ public class Blockchain implements Serializable {
             return true;
         }
         else return false;
+    }
+
+    public void determineNewDifficulty(Block block){
+        if(block.timeNeededToCreate<5){
+            difficulty += 1;
+        }
+        else if (difficulty == 1) return;
+        else difficulty -=1;
+
     }
 
     //Serialization Functions

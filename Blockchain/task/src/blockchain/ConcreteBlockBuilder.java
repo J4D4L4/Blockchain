@@ -83,6 +83,12 @@ public class ConcreteBlockBuilder implements BlockBuilder {
 
         block.setPreviousBlock(previousBlock);
     }
+    public void buildDifficulty(int difficulty) {
+
+        block.setDiffcultyWhileCreated(difficulty);
+
+
+    }
 
     public void setTimeNeededToCreate(int time){
         block.timeNeededToCreate = time;
