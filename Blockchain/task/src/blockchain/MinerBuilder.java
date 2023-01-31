@@ -5,7 +5,7 @@ public class MinerBuilder {
     private Miner miner;
     int idCounter = 1;
 
-    public MinerBuilder(){
+    public MinerBuilder() {
         this.reset();
     }
 
@@ -13,22 +13,25 @@ public class MinerBuilder {
         miner.blockchain = Blockchain.getInstance();
 
     }
-    public void setNotify(Blockchain blockchain){
-        blockchain.minerObservers.subscribe(miner,Event.NEWBLOCK);
+
+    public void setNotify(Blockchain blockchain) {
+        blockchain.minerObservers.subscribe(miner, Event.NEWBLOCK);
     }
 
     public void setID() {
-        miner.ID =idCounter;
+        miner.ID = idCounter;
         idCounter++;
     }
-    public void setInterrupt(){
+
+    public void setInterrupt() {
         miner.interrupt = false;
     }
 
-    public void reset(){
+    public void reset() {
         miner = new Miner();
     }
-    public Miner getMiner(){
+
+    public Miner getMiner() {
         return miner;
     }
 

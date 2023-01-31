@@ -15,20 +15,16 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         Blockchain blockchain = Blockchain.getInstance();
         List<Miner> minerList = new ArrayList<>();
-        //Miner miner = blockchain.director.makeMiner(blockchain);
+
         int amountOfBlocksToCreate = 5;
         int minersToCreate = 5;
         List<Block> createdBlocks = new ArrayList<>();
-        //ExecutorService executor = (ExecutorService) Executors.newCachedThreadPool();
+
         ExecutorService executor = Executors.newFixedThreadPool(2);
+
         //System.out.print("Enter how many zeros the hash must start with: ");
         //int nrOfZeroes = scanner.nextInt();
-/*
-        for (int miners =0; miners<minersToCreate ; miners++){
-            Miner miner = blockchain.director.makeMiner(blockchain);
-            minerList.add(miner);
-            executor.submit(miner);
-        }*/
+
 
         while (blockchain.listOfBlocks.size()<amountOfBlocksToCreate) {
             Miner miner = blockchain.director.makeMiner(blockchain);
@@ -41,20 +37,9 @@ public class Main {
 
 
         print(blockchain.listOfBlocks);
-        //System.out.println(blockchain.validateChain());
-
-        }
 
 
-        /*
-        for(int blockNr = 0; blockNr < amountOfBlocksToCreate; blockNr++) {
-            miner.createBlock();
-
-        }
-        */
-
-
-
+}
 
 
     public static void print(LinkedList<Block> blockList){

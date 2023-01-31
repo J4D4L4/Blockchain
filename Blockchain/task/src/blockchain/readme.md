@@ -1,8 +1,19 @@
 Hyperskill Project: Blockchain
 
-Blockchain has a simple interpretation: it's just a chain of blocks. It represents a sequence of data that you can't break in the middle; you can only append new data at the end of it. All the blocks in the blockchain are chained together.
+Blockchain has a simple interpretation: it's just a chain of blocks. It represents a sequence of data that you can't
+break in the middle; you can only append new data at the end of it. All the blocks in the blockchain are chained
+together.
 
-- Stage 1: In the first stage, you need to implement such a blockchain. In addition to storing the hash of the previous block, every block should also have a unique identifier. The chain starts with a block whose id = 1. Also, every block should contain a timestamp representing the time the block was created. You can use the following code to get such a timestamp. This represents the number of milliseconds since 1 January 1970.
--  Stage 2: Implement proof of work. In this stage, you need to improve the blockchain. It should generate new blocks only with hashes that start with N zeros. The number N should be input from the keyboard.
-- Stage 3: In this stage, you should create a lot of threads with miners, and every one of them should contain the same blockchain. The miners should mine new blocks and the blockchain should regulate the number N. The blockchain should check the validity of the incoming block (ensure that the previous hash equals the hash of the last block of the blockchain and the hash of this new block starts with N zeros). At the start, the number N equals 0 and should be increased by 1 / decreased by 1 / stays the same after the creation of the new block based on the time of its creation.
-  - Used Singleton for Blockchain and Observer for miners.
+- Stage 1: In the first stage, you need to implement such a blockchain. In addition to storing the hash of the previous
+  block, every block should also have a unique identifier. The chain starts with a block whose id = 1. Also, every block
+  should contain a timestamp representing the time the block was created. You can use the following code to get such a
+  timestamp. This represents the number of milliseconds since 1 January 1970.
+- Stage 2: Implement proof of work. In this stage, you need to improve the blockchain. It should generate new blocks
+  only with hashes that start with N zeros. The number N should be input from the keyboard.
+- Stage 3: In this stage, you should create a lot of threads with miners, and every one of them should contain the same
+  blockchain. The miners should mine new blocks and the blockchain should regulate the number N. The blockchain should
+  check the validity of the incoming block (ensure that the previous hash equals the hash of the last block of the
+  blockchain and the hash of this new block starts with N zeros). At the start, the number N equals 0 and should be
+  increased by 1 / decreased by 1 / stays the same after the creation of the new block based on the time of its
+  creation.
+    - Used Singleton for Blockchain and Observer for miners.

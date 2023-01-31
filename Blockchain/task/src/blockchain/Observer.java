@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Observer {
-    private HashMap<Miner, Event> listeners = new HashMap<>();
+    private final HashMap<Miner, Event> listeners = new HashMap<>();
 
-    public void subscribe(Miner miner,Event event) {
+    public void subscribe(Miner miner, Event event) {
         listeners.put(miner, event);
     }
 
@@ -15,8 +15,8 @@ public class Observer {
     }
 
     public void notify(Event event) {
-        for (var pair : listeners.entrySet()){
-            if (pair.getValue() == event){
+        for (var pair : listeners.entrySet()) {
+            if (pair.getValue() == event) {
                 pair.getKey().update();
             }
         }

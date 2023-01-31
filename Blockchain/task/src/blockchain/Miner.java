@@ -6,6 +6,7 @@ public class Miner implements EventListener, Runnable {
     public Blockchain blockchain;
     public int ID;
     boolean interrupt;
+
     @Override
     public void update() {
         System.out.println("notified");
@@ -17,20 +18,18 @@ public class Miner implements EventListener, Runnable {
                 Block newBlock = blockchain.director.makeBlock(null, blockchain.difficulty);
                 if (HashUtil.startsWithXZero(newBlock.hashBlock) >= blockchain.difficulty) {
                     newBlock.createdByMiner = "" + ID;
-                    if(blockchain.addBlock(newBlock)) {
+                    if (blockchain.addBlock(newBlock)) {
                         return newBlock;
-                    }
-                    else return null;
+                    } else return null;
                 }
             } else {
 
-                Block newBlock = blockchain.director.makeBlock(blockchain.headBlock, blockchain.difficulty);
+                Block newBlock = blockchain.director.makeBlock(Blockchain.headBlock, blockchain.difficulty);
                 if (HashUtil.startsWithXZero(newBlock.hashBlock) >= blockchain.difficulty) {
                     newBlock.createdByMiner = "" + ID;
-                    if(blockchain.addBlock(newBlock)) {
+                    if (blockchain.addBlock(newBlock)) {
                         return newBlock;
-                    }
-                    else return null;
+                    } else return null;
                 }
 
             }
@@ -45,7 +44,8 @@ public class Miner implements EventListener, Runnable {
         //while (run) {
         synchronized (this) {
             Block returnBlock = createBlock();
-            if (returnBlock != null) return;
+            if (returnBlock != null) {
+            }
         }
 
     }
