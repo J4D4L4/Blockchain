@@ -16,4 +16,4 @@ together.
   blockchain and the hash of this new block starts with N zeros). At the start, the number N equals 0 and should be
   increased by 1 / decreased by 1 / stays the same after the creation of the new block based on the time of its
   creation.
-    - Used Singleton for Blockchain and Observer for miners.
+    - Used Singleton for Blockchain and Observer for miners. Thread managment of miners with Write Lock on Blockchain
