@@ -2,10 +2,11 @@ package blockchain;
 
 import java.time.Instant;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Block {
     String uniqueID;
-    LinkedList<Transaction> transactionList;
+    List<Transaction> transactionList;
     long timestamp;
     String hashPreviousBlock;
 
@@ -35,7 +36,7 @@ public class Block {
     //used to generate Hash of Block
     public String toString(){
 
-        String paramtersAsString = uniqueID+transactionList.toString()+timestamp+hashPreviousBlock+magicNumber;
+        String paramtersAsString = uniqueID+timestamp+hashPreviousBlock+magicNumber;
         return paramtersAsString;
 
     }
@@ -49,6 +50,14 @@ public class Block {
         System.out.printf("Magic number: %s%n",getMagicNumber());
         System.out.printf("Hash of the previous block:%n%s%n",getHashPreviousBlock());
         System.out.printf("Hash of the block:%n%s%n",getHashBlock());
+        System.out.printf("Block data:");
+        if(transactionList.size() == 0)
+            System.out.println("No messages");
+        else {
+            for (Transaction transaction : transactionList) {
+                System.out.printf("%s%n", transaction.message);
+            }
+        }
         System.out.printf("Block was generating for %d seconds%n", getTimeNeededToCreate() );
         System.out.printf("N was increased to %s%n", getDiffcultyWhileCreated()+1 );
         System.out.println("");
@@ -63,7 +72,7 @@ public class Block {
         this.uniqueID = uniqueID;
     }
 
-    public LinkedList<Transaction> getTransactionList() {
+    public List<Transaction> getTransactionList() {
         return transactionList;
     }
 

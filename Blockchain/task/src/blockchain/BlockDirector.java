@@ -6,11 +6,12 @@ public class BlockDirector {
 
     ConcreteBlockBuilder blockBuilder;
     MinerBuilder minerBuilder;
-
+    UserBuilder userBulder;
     BlockDirector(){
 
         blockBuilder = new ConcreteBlockBuilder();
         minerBuilder = new MinerBuilder();
+        userBulder = new UserBuilder();
     }
 
     public Block makeBlock(Block previousBlock, int nrOfZero){
@@ -34,6 +35,13 @@ public class BlockDirector {
         minerBuilder.setBlockchain();
         minerBuilder.setNotify(blockchain);
         return minerBuilder.getMiner();
+    }
+
+    public User makeUser(){
+        userBulder.reset();
+        userBulder.setID();
+        userBulder.setBlockchain();
+        return userBulder.getUser();
     }
 
 }

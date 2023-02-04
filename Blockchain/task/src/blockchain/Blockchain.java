@@ -3,7 +3,9 @@ package blockchain;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -18,12 +20,14 @@ public class Blockchain implements Serializable {
     private static Blockchain instance = new Blockchain();
     Observer minerObservers;
     ReadWriteLock lock = new ReentrantReadWriteLock();
+    List<Transaction> transactionList;
 
 
     private Blockchain(){
         this.listOfBlocks = new LinkedList<>();
         this.director = new BlockDirector();
         this.minerObservers = new Observer();
+        this.transactionList = new ArrayList<>();
         difficulty = 0;
     }
 
@@ -42,9 +46,11 @@ public class Blockchain implements Serializable {
             lock.writeLock().lock();
             if (listOfBlocks.size() > 0) {
                 if (HashUtil.startsWithXZero(block.hashBlock) >= difficulty && block.getHashPreviousBlock().equals(headBlock.getHashBlock())) {
-
+                    block.transactionList = transactionList;
+                    //resetTransactionList();
                     listOfBlocks.add(block);
                     headBlock = block;
+                    minerObservers.notify(Event.NEWBLOCK);
                     if(difficulty == block.diffcultyWhileCreated) determineNewDifficulty(block);
                     lock.writeLock().unlock();
                     //minerObservers.notify(Event.NEWBLOCK);
@@ -57,7 +63,7 @@ public class Blockchain implements Serializable {
                 headBlock = block;
                 if(difficulty == block.diffcultyWhileCreated) determineNewDifficulty(block);
                 lock.writeLock().unlock();
-                //minerObservers.notify(Event.NEWBLOCK);
+                minerObservers.notify(Event.NEWBLOCK);
                 return true;
             }
             lock.writeLock().unlock();
@@ -66,6 +72,14 @@ public class Blockchain implements Serializable {
             return false;
         }
         return false;
+    }
+    public synchronized void addTransaction(Transaction transaction){
+        lock.writeLock().lock();
+        this.transactionList.add(transaction);
+        lock.writeLock().unlock();
+    }
+    public void resetTransactionList() {
+        transactionList = new ArrayList<>();
     }
 
     public boolean validateChain(){

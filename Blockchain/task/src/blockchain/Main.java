@@ -20,26 +20,29 @@ public class Main {
         int minersToCreate = 5;
         List<Block> createdBlocks = new ArrayList<>();
 
-        ExecutorService executor = Executors.newFixedThreadPool(2);
+        ExecutorService executor = Executors.newFixedThreadPool(10);
+
 
         //System.out.print("Enter how many zeros the hash must start with: ");
         //int nrOfZeroes = scanner.nextInt();
 
 
         while (blockchain.listOfBlocks.size()<amountOfBlocksToCreate) {
+            User user = blockchain.director.makeUser();
+            executor.submit(user);
             Miner miner = blockchain.director.makeMiner(blockchain);
             minerList.add(miner);
             executor.submit(miner);
-            executor.awaitTermination(100, TimeUnit.MILLISECONDS);
 
-            }
+            executor.awaitTermination(1000, TimeUnit.MILLISECONDS);
+        }
 
 
 
         print(blockchain.listOfBlocks);
 
 
-}
+    }
 
 
     public static void print(LinkedList<Block> blockList){

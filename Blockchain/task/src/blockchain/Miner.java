@@ -1,6 +1,8 @@
 package blockchain;
 
 
+import java.util.concurrent.Callable;
+
 public class Miner implements EventListener, Runnable {
 
     public Blockchain blockchain;
@@ -9,7 +11,7 @@ public class Miner implements EventListener, Runnable {
 
     @Override
     public void update() {
-        System.out.println("notified");
+        return;
     }
 
     public Block createBlock() {
@@ -37,16 +39,18 @@ public class Miner implements EventListener, Runnable {
     }
 
 
-    @Override
+    //@Override
     public void run() {
 
-        boolean run = true;
-        //while (run) {
-        synchronized (this) {
-            Block returnBlock = createBlock();
-            if (returnBlock != null) {
-            }
+        Block returnBlock = createBlock();
+        if (returnBlock != null) {
+
         }
 
+
+
+
     }
+
+
 }
