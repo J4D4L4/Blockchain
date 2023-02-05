@@ -1,5 +1,7 @@
 package blockchain;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
 
-    public static void main(String[] args) throws InterruptedException, ExecutionException {
+    public static void main(String[] args) throws InterruptedException, ExecutionException, NoSuchAlgorithmException, NoSuchProviderException {
         Scanner scanner = new Scanner(System.in);
         Blockchain blockchain = Blockchain.getInstance();
         List<Miner> minerList = new ArrayList<>();

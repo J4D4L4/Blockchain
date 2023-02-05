@@ -3,9 +3,8 @@ package blockchain;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.security.Signature;
+import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -21,6 +20,8 @@ public class Blockchain implements Serializable {
     Observer minerObservers;
     ReadWriteLock lock = new ReentrantReadWriteLock();
     List<Transaction> transactionList;
+    Map<Integer, User> userBC;
+    int transactionCounter;
 
 
     private Blockchain(){
@@ -28,6 +29,8 @@ public class Blockchain implements Serializable {
         this.director = new BlockDirector();
         this.minerObservers = new Observer();
         this.transactionList = new ArrayList<>();
+        this.userBC = new HashMap<>();
+        this.transactionCounter = 0;
         difficulty = 0;
     }
 
@@ -39,7 +42,13 @@ public class Blockchain implements Serializable {
         return instance;
     }
 
-
+    public boolean checkAllTransactions(Block block) throws Exception {
+        for (Transaction transaction : block.transactionList){
+            if(verifySignature(transaction, userBC.get(transaction.userID)))
+                return false;
+        }
+        return true;
+    }
 
     public synchronized boolean addBlock(Block block){
         try {
@@ -48,6 +57,18 @@ public class Blockchain implements Serializable {
                 if (HashUtil.startsWithXZero(block.hashBlock) >= difficulty && block.getHashPreviousBlock().equals(headBlock.getHashBlock())) {
                     //block.transactionList = transactionList;
                     //resetTransactionList();
+                   if(!checkAllTransactions(block)  ) {
+
+                           lock.writeLock().unlock();
+                           return false;
+
+                   }
+                   if(!allTransactionCountersHigher(block)) {
+
+                       lock.writeLock().unlock();
+                       return false;
+
+                   }
                     listOfBlocks.add(block);
                     headBlock = block;
                     minerObservers.notify(Event.NEWBLOCK);
@@ -70,6 +91,8 @@ public class Blockchain implements Serializable {
         }
         catch (NullPointerException r){
             return false;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         return false;
     }
@@ -107,6 +130,28 @@ public class Blockchain implements Serializable {
         }
         else if (difficulty == 1) return;
         else difficulty -=1;
+
+    }
+
+    // verify user signature
+    private boolean verifySignature(Transaction data, User user) throws Exception {
+        Signature sig = Signature.getInstance("SHA1withRSA");
+        sig.initVerify(user.keys.getPublicKey());
+        sig.update(data.toString().getBytes());
+        boolean returnVal = sig.verify(data.signature);
+        return  returnVal;
+    }
+
+    public int getTransactionCounter() {
+        transactionCounter++;
+        return transactionCounter;
+    }
+
+    public boolean allTransactionCountersHigher(Block block) {
+
+       if ( block.transactionList.stream().map( transaction -> transaction.id).min(Integer::compare).get() > headBlock.transactionList.stream().map(transaction -> transaction.id).max(Integer::compare).get())
+           return true;
+       else return false;
 
     }
 

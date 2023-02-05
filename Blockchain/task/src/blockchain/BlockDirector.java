@@ -1,5 +1,7 @@
 package blockchain;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.time.LocalTime;
 
 public class BlockDirector {
@@ -22,6 +24,7 @@ public class BlockDirector {
         blockchain.resetTransactionList();
         blockBuilder.buildPreviousBlock(previousBlock);
         blockBuilder.buildID(previousBlock);
+
         blockBuilder.buildHash(nrOfZero);
         LocalTime end = LocalTime.now();
         blockBuilder.setTimeNeededToCreate(end.toSecondOfDay()-start.toSecondOfDay());
@@ -38,10 +41,11 @@ public class BlockDirector {
         return minerBuilder.getMiner();
     }
 
-    public User makeUser(){
+    public User makeUser() throws NoSuchAlgorithmException, NoSuchProviderException {
         userBulder.reset();
         userBulder.setID();
         userBulder.setBlockchain();
+        userBulder.setKeys();
         return userBulder.getUser();
     }
 
