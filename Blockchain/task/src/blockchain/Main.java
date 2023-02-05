@@ -14,9 +14,12 @@ import java.util.concurrent.TimeUnit;
 public class Main {
 
     public static void main(String[] args) throws InterruptedException, ExecutionException, NoSuchAlgorithmException, NoSuchProviderException {
+        java.util.logging.Logger logger =  java.util.logging.Logger.getLogger(Main.class.getName());
         Scanner scanner = new Scanner(System.in);
         Blockchain blockchain = Blockchain.getInstance();
         List<Miner> minerList = new ArrayList<>();
+
+
 
         int amountOfBlocksToCreate = 5;
         int minersToCreate = 5;
@@ -35,13 +38,17 @@ public class Main {
             Miner miner = blockchain.director.makeMiner(blockchain);
             minerList.add(miner);
             executor.submit(miner);
+            executor.awaitTermination(200, TimeUnit.MILLISECONDS);
 
-            executor.awaitTermination(1000, TimeUnit.MILLISECONDS);
         }
 
-
+        //executor.shutdown();
 
         print(blockchain.listOfBlocks);
+        executor.shutdown();
+        blockchain = new Blockchain();
+        executor.awaitTermination(1000, TimeUnit.MILLISECONDS);
+        System.exit(0);
 
 
     }

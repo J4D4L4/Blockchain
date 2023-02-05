@@ -22,9 +22,8 @@ public class BlockDirector {
         blockBuilder.buildTimeStamp();
         blockBuilder.buildListOfTransactions(blockchain.transactionList);
         blockchain.resetTransactionList();
-        blockBuilder.buildPreviousBlock(previousBlock);
-        blockBuilder.buildID(previousBlock);
-
+        blockBuilder.buildPreviousBlock(blockchain.headBlock);
+        blockBuilder.buildID(blockchain.headBlock);
         blockBuilder.buildHash(nrOfZero);
         LocalTime end = LocalTime.now();
         blockBuilder.setTimeNeededToCreate(end.toSecondOfDay()-start.toSecondOfDay());

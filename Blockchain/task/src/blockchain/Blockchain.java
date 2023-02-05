@@ -22,9 +22,9 @@ public class Blockchain implements Serializable {
     List<Transaction> transactionList;
     Map<Integer, User> userBC;
     int transactionCounter;
+    java.util.logging.Logger logger =  java.util.logging.Logger.getLogger(this.getClass().getName());
 
-
-    private Blockchain(){
+    Blockchain(){
         this.listOfBlocks = new LinkedList<>();
         this.director = new BlockDirector();
         this.minerObservers = new Observer();
@@ -54,21 +54,25 @@ public class Blockchain implements Serializable {
         try {
             lock.writeLock().lock();
             if (listOfBlocks.size() > 0) {
-                if (HashUtil.startsWithXZero(block.hashBlock) >= difficulty && block.getHashPreviousBlock().equals(headBlock.getHashBlock())) {
+                logger.info("TChecking Hash: Zeros:"+HashUtil.startsWithXZero(block.hashBlock)+ "Difficulty: "+difficulty +", hash prev right: " +block.getHashPreviousBlock().equals(headBlock.getHashBlock()));
+                if (HashUtil.startsWithXZero(block.hashBlock) >= difficulty ) { //&& block.getHashPreviousBlock().equals(headBlock.getHashBlock())
                     //block.transactionList = transactionList;
                     //resetTransactionList();
+                    //logger.info("TChecking Sig!");
                    if(!checkAllTransactions(block)  ) {
 
                            lock.writeLock().unlock();
                            return false;
 
                    }
+                    //logger.info("TChecking ID");
                    if(!allTransactionCountersHigher(block)) {
 
                        lock.writeLock().unlock();
                        return false;
 
                    }
+                    logger.info("block was created");
                     listOfBlocks.add(block);
                     headBlock = block;
                     minerObservers.notify(Event.NEWBLOCK);
@@ -77,6 +81,7 @@ public class Blockchain implements Serializable {
                     //minerObservers.notify(Event.NEWBLOCK);
                     return true;
                 }
+                //else return false;
 
             } else if (HashUtil.startsWithXZero(block.hashBlock) >= difficulty && headBlock == null) {
 
