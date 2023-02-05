@@ -5,7 +5,7 @@ import java.util.List;
 public interface BlockBuilder {
 
     public void buildTimeStamp();
-    public void buildListOfTransactions(List<Transaction> transactionList);
+    public void buildListOfTransactions(List<Transaction> transactionList, String miner);
     public void buildHashOfPreviousBlock(Block previousBlock);
     public Block getBlock();
     public void buildHash(int numberOfZero);

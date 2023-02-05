@@ -55,10 +55,10 @@ public class Blockchain implements Serializable {
             lock.writeLock().lock();
             if (listOfBlocks.size() > 0) {
                 logger.info("TChecking Hash: Zeros:"+HashUtil.startsWithXZero(block.hashBlock)+ "Difficulty: "+difficulty +", hash prev right: " +block.getHashPreviousBlock().equals(headBlock.getHashBlock()));
-                if (HashUtil.startsWithXZero(block.hashBlock) >= difficulty ) { //&& block.getHashPreviousBlock().equals(headBlock.getHashBlock())
+                if (HashUtil.startsWithXZero(block.hashBlock) >= difficulty && block.getHashPreviousBlock().equals(headBlock.getHashBlock())) { //
                     //block.transactionList = transactionList;
                     //resetTransactionList();
-                    //logger.info("TChecking Sig!");
+                    logger.info("TChecking Sig!");
                    if(!checkAllTransactions(block)  ) {
 
                            lock.writeLock().unlock();

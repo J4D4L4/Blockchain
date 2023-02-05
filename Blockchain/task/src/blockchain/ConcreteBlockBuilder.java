@@ -20,8 +20,9 @@ public class ConcreteBlockBuilder implements BlockBuilder {
     }
 
     @Override
-    public void buildListOfTransactions(List<Transaction> transactionList) {
+    public void buildListOfTransactions(List<Transaction> transactionList, String miner) {
         this.block.transactionList = transactionList;
+        //this.block.transactionList.add(new Transaction(null,miner,100));
 
     }
 
@@ -96,6 +97,8 @@ public class ConcreteBlockBuilder implements BlockBuilder {
     public void setTimeNeededToCreate(int time){
         block.timeNeededToCreate = time;
     }
+
+    public void addMinerRewarf(String miner){block.transactionList.add(new Transaction(null,miner,100)); }
 
 
 

@@ -16,12 +16,13 @@ public class BlockDirector {
         userBulder = new UserBuilder();
     }
 
-    public Block makeBlock(Block previousBlock, int nrOfZero, Blockchain blockchain){
+    public Block makeBlock(Block previousBlock, int nrOfZero, Blockchain blockchain, String miner){
         LocalTime start = LocalTime.now();
         blockBuilder.reset();
         blockBuilder.buildTimeStamp();
-        blockBuilder.buildListOfTransactions(blockchain.transactionList);
+        blockBuilder.buildListOfTransactions(blockchain.transactionList, miner);
         blockchain.resetTransactionList();
+        //blockBuilder.addMinerRewarf(miner);
         blockBuilder.buildPreviousBlock(blockchain.headBlock);
         blockBuilder.buildID(blockchain.headBlock);
         blockBuilder.buildHash(nrOfZero);

@@ -22,6 +22,7 @@ public class UserBuilder {
 
     public void setID() {
         user.ID = idCounter;
+        user.name = "User "+idCounter;
         idCounter++;
     }
 

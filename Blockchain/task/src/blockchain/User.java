@@ -2,7 +2,7 @@ package blockchain;
 
 import java.util.concurrent.TimeUnit;
 
-public class User implements Runnable{
+public class User extends Entity implements Runnable{
     public Blockchain blockchain;
     public int ID;
     PublicPrivateKeys keys;

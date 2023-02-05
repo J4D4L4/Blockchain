@@ -20,6 +20,7 @@ public class MinerBuilder {
 
     public void setID() {
         miner.ID = idCounter;
+        miner.name ="Miner "+idCounter;
         idCounter++;
     }
 

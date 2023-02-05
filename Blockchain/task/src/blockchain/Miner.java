@@ -4,7 +4,7 @@ package blockchain;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-public class Miner implements EventListener, Runnable {
+public class Miner extends Entity implements EventListener, Runnable {
 
     public Blockchain blockchain;
     public int ID;
@@ -19,8 +19,10 @@ public class Miner implements EventListener, Runnable {
     public Block createBlock() throws InterruptedException {
 
         while (true) {
+
             if (blockchain.listOfBlocks.size() == 0) {
-                Block newBlock = blockchain.director.makeBlock(null, blockchain.difficulty,blockchain);
+                Block newBlock = blockchain.director.makeBlock(null, blockchain.difficulty,blockchain, this.name);
+
                 if (HashUtil.startsWithXZero(newBlock.hashBlock) >= blockchain.difficulty) {
                     newBlock.createdByMiner = "" + ID;
                     if (blockchain.addBlock(newBlock)) {
@@ -29,7 +31,7 @@ public class Miner implements EventListener, Runnable {
                 }
             } else {
                 TimeUnit.MILLISECONDS.sleep(100);
-                Block newBlock = blockchain.director.makeBlock(blockchain.headBlock, blockchain.difficulty,blockchain);
+                Block newBlock = blockchain.director.makeBlock(blockchain.headBlock, blockchain.difficulty,blockchain, this.name);
 
                 if (HashUtil.startsWithXZero(newBlock.hashBlock) >= blockchain.difficulty) {
 
