@@ -36,7 +36,7 @@ public class Block {
     //used to generate Hash of Block
     public String toString(){
 
-        String paramtersAsString = uniqueID+timestamp+hashPreviousBlock+magicNumber;
+        String paramtersAsString = uniqueID+timestamp+hashPreviousBlock+transactionList.toString()+magicNumber;
         return paramtersAsString;
 
     }

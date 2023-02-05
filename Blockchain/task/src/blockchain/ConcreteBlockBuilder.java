@@ -3,6 +3,7 @@ package blockchain;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ConcreteBlockBuilder implements BlockBuilder {
@@ -19,10 +20,12 @@ public class ConcreteBlockBuilder implements BlockBuilder {
     }
 
     @Override
-    public void buildListOfTransactions() {
-
+    public void buildListOfTransactions(List<Transaction> transactionList) {
+        this.block.transactionList = transactionList;
 
     }
+
+
 
     @Override
     public void buildHashOfPreviousBlock(Block previousBlock) {
@@ -93,4 +96,6 @@ public class ConcreteBlockBuilder implements BlockBuilder {
     public void setTimeNeededToCreate(int time){
         block.timeNeededToCreate = time;
     }
+
+
 }

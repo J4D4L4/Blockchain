@@ -17,7 +17,7 @@ public class Miner implements EventListener, Runnable {
     public Block createBlock() {
         while (true) {
             if (blockchain.listOfBlocks.size() == 0) {
-                Block newBlock = blockchain.director.makeBlock(null, blockchain.difficulty);
+                Block newBlock = blockchain.director.makeBlock(null, blockchain.difficulty,blockchain);
                 if (HashUtil.startsWithXZero(newBlock.hashBlock) >= blockchain.difficulty) {
                     newBlock.createdByMiner = "" + ID;
                     if (blockchain.addBlock(newBlock)) {
@@ -26,7 +26,7 @@ public class Miner implements EventListener, Runnable {
                 }
             } else {
 
-                Block newBlock = blockchain.director.makeBlock(Blockchain.headBlock, blockchain.difficulty);
+                Block newBlock = blockchain.director.makeBlock(Blockchain.headBlock, blockchain.difficulty,blockchain);
                 if (HashUtil.startsWithXZero(newBlock.hashBlock) >= blockchain.difficulty) {
                     newBlock.createdByMiner = "" + ID;
                     if (blockchain.addBlock(newBlock)) {

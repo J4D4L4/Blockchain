@@ -46,7 +46,7 @@ public class Blockchain implements Serializable {
             lock.writeLock().lock();
             if (listOfBlocks.size() > 0) {
                 if (HashUtil.startsWithXZero(block.hashBlock) >= difficulty && block.getHashPreviousBlock().equals(headBlock.getHashBlock())) {
-                    block.transactionList = transactionList;
+                    //block.transactionList = transactionList;
                     //resetTransactionList();
                     listOfBlocks.add(block);
                     headBlock = block;
