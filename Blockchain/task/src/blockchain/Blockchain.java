@@ -44,7 +44,7 @@ public class Blockchain implements Serializable {
         this.transactionList = new ArrayList<>();
         this.entityBC = new HashMap<>();
         this.transactionCounter = 0;
-        difficulty = 0;
+        difficulty = -10;
     }
 
     //singleton functions
@@ -59,6 +59,9 @@ public class Blockchain implements Serializable {
         for (Transaction transaction : block.transactionList){
             if(!verifySignature(transaction, entityBC.get(transaction.userID)))
                 return false;
+            if(transaction.from != -1)
+                if(!checkTransactionAmt(transaction.from,transaction.amount))
+                    return false;
         }
         return true;
     }
@@ -202,6 +205,11 @@ public class Blockchain implements Serializable {
     public void setState(BlockchainState state) {
         this.listOfBlocks = new LinkedList<>(state.listOfBlocks);
         this.headBlock = state.headBlock;
+    }
+    public boolean checkTransactionAmt(int from, int amt) {
+        if(getBalance(from) >= amt)
+            return true;
+        else return false;
     }
 
 

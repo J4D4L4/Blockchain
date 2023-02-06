@@ -15,11 +15,13 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         Blockchain blockchain = Blockchain.getInstance();
         List<Miner> minerList = new ArrayList<>();
+        List<User> usersList = new ArrayList<>();
 
 
 
-        int amountOfBlocksToCreate = 5;
+        int amountOfBlocksToCreate = 15;
         int minersToCreate = 5;
+        int usersToCreate = 4;
         List<Block> createdBlocks = new ArrayList<>();
 
         ExecutorService executor = Executors.newFixedThreadPool(4);
@@ -27,18 +29,23 @@ public class Main {
         for (int amtMiner = 0; amtMiner < minersToCreate; amtMiner++){
             minerList.add(blockchain.director.makeMiner(blockchain));
         }
+        for (int amtUser = 0; amtUser < usersToCreate; amtUser++){
+            usersList.add(blockchain.director.makeUser());
+        }
 
         //System.out.print("Enter how many zeros the hash must start with: ");
         //int nrOfZeroes = scanner.nextInt();
 
 
         while (blockchain.listOfBlocks.size()<amountOfBlocksToCreate) {
-            User user = blockchain.director.makeUser();
-            executor.submit(user);
+            //User user = blockchain.director.makeUser();
+            Random rand = new Random();
+            int randomID = rand.nextInt(usersList.size()-1);
+            executor.submit(usersList.get(randomID));
             //Miner miner = blockchain.director.makeMiner(blockchain);
             //Miner miner1 = blockchain.director.makeMiner(blockchain);
-            Random rand = new Random();
-            int randomID = rand.nextInt(minerList.size()-1);
+
+            randomID = rand.nextInt(minerList.size()-1);
             executor.submit(minerList.get(randomID));
             //executor.submit(miner);
             //executor.awaitTermination(200, TimeUnit.MILLISECONDS);

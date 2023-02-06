@@ -1,5 +1,7 @@
 package blockchain;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.time.LocalTime;
 import java.util.Date;
@@ -28,7 +30,6 @@ public class ConcreteBlockBuilder implements BlockBuilder {
         this.block.transactionList = transactionList;
 
         this.block.transactionList.add(minerReward);
-        logger.info("Added Transaction? "+transactionList.size());
     }
 
 
@@ -103,8 +104,10 @@ public class ConcreteBlockBuilder implements BlockBuilder {
         block.timeNeededToCreate = time;
     }
 
-
-
+    @Override
+    public void buildBlockchain() throws NoSuchAlgorithmException, NoSuchProviderException {
+        block.blockchain = Blockchain.getInstance();
+    }
 
 
 }

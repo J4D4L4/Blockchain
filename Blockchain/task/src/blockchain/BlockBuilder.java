@@ -1,5 +1,7 @@
 package blockchain;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.util.List;
 
@@ -13,6 +15,7 @@ public interface BlockBuilder {
     public void buildID(Block previousBlock);
     public void buildPreviousBlock(Block previousBlock);
     public void setTimeNeededToCreate(int time);
+    public void buildBlockchain() throws NoSuchAlgorithmException, NoSuchProviderException;
 
 
 

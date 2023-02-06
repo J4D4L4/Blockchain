@@ -28,7 +28,7 @@ public class MinerBuilder {
 
     public void setID(int id) {
         miner.ID = id;
-        miner.name ="Miner "+miner.ID;
+        miner.name ="miner"+miner.ID;
 
     }
 

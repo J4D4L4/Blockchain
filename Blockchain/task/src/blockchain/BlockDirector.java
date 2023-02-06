@@ -24,6 +24,7 @@ public class BlockDirector {
         LocalTime start = LocalTime.now();
         blockBuilder.reset();
         blockBuilder.buildTimeStamp();
+        blockBuilder.buildBlockchain();
         blockBuilder.buildListOfTransactions(blockchain.transactionList, minerReward);
         blockchain.resetTransactionList();
         //blockBuilder.addMinerRewarf(miner);

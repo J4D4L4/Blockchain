@@ -1,5 +1,6 @@
 package blockchain;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class User extends Entity implements Runnable{
@@ -11,7 +12,9 @@ public class User extends Entity implements Runnable{
     }
 
     public Transaction createTransaction(){
-        Transaction transaction = new Transaction(this.ID, blockchain.entityBC.keySet().stream().findAny().get(),this.ID,100);
+        Random rand = new Random();
+        int randomID = rand.nextInt(blockchain.entityBC.size()-1);
+        Transaction transaction = new Transaction(this.ID, randomID,this.ID,100);
 
         transaction.id = blockchain.getTransactionCounter();
         try {
