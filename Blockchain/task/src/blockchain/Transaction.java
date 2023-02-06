@@ -12,8 +12,8 @@ public class Transaction {
     String message;
     byte[] signature;
     int userID;
-    String from;
-    String to;
+    int from;
+    int to;
     int amount;
     Transaction(String s, User user){
         message = s;
@@ -21,10 +21,11 @@ public class Transaction {
 
 
     }
-    Transaction (String from, String to, int amount){
+    Transaction (int from, int to, int signerID, int amount){
         this.from = from;
         this.to = to;
         this.amount = amount;
+        this.userID = signerID;
     }
 
     public void sign(PrivateKey keys) throws InvalidKeyException, Exception{
@@ -36,7 +37,7 @@ public class Transaction {
     }
 
     public String toString(){
-        return from+signature+to+amount;
+        return ""+from+to+amount;
     }
 
 

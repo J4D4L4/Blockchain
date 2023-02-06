@@ -12,24 +12,23 @@ public class UserBuilder {
         this.reset();
     }
 
-    public void setBlockchain() {
+    public void setBlockchain() throws NoSuchAlgorithmException, NoSuchProviderException {
         user.blockchain = Blockchain.getInstance();
-        user.blockchain.userBC.put(user.ID,user);
+        user.blockchain.entityBC.put(user.ID,user);
 
     }
 
 
 
-    public void setID() {
-        user.ID = idCounter;
-        user.name = "User "+idCounter;
-        idCounter++;
+    public void setID(int id) {
+        user.ID = id;
+        user.name = "User "+user.ID;
+        //idCounter++;
     }
 
     public void setKeys() throws NoSuchAlgorithmException, NoSuchProviderException {
-        PublicPrivateKeys keys = new PublicPrivateKeys(1024);
-        keys.createKeys();
-        user.keys = keys;
+
+        user.keys = HashUtil.createKeys();
     }
 
 

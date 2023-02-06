@@ -16,12 +16,12 @@ public class Miner extends Entity implements EventListener, Runnable {
         return;
     }
 
-    public Block createBlock() throws InterruptedException {
+    public Block createBlock() throws Exception {
 
         while (true) {
 
             if (blockchain.listOfBlocks.size() == 0) {
-                Block newBlock = blockchain.director.makeBlock(null, blockchain.difficulty,blockchain, this.name);
+                Block newBlock = blockchain.director.makeBlock(null, blockchain.difficulty,blockchain, this, createMinerReward());
 
                 if (HashUtil.startsWithXZero(newBlock.hashBlock) >= blockchain.difficulty) {
                     newBlock.createdByMiner = "" + ID;
@@ -31,7 +31,7 @@ public class Miner extends Entity implements EventListener, Runnable {
                 }
             } else {
                 TimeUnit.MILLISECONDS.sleep(100);
-                Block newBlock = blockchain.director.makeBlock(blockchain.headBlock, blockchain.difficulty,blockchain, this.name);
+                Block newBlock = blockchain.director.makeBlock(blockchain.headBlock, blockchain.difficulty,blockchain, this, createMinerReward());
 
                 if (HashUtil.startsWithXZero(newBlock.hashBlock) >= blockchain.difficulty) {
 
@@ -45,14 +45,45 @@ public class Miner extends Entity implements EventListener, Runnable {
         }
     }
 
+    public Transaction createMinerReward(){
+        Transaction transaction = new Transaction(-1, this.ID, this.ID, 100);
+
+        transaction.id = blockchain.getTransactionCounter();
+        try {
+            transaction.sign(this.keys.getPrivateKey());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return transaction;
+    }
+
+    public Transaction createTransaction(){
+        Transaction transaction = new Transaction(this.ID, blockchain.entityBC.keySet().stream().findAny().get(),this.ID,100);
+
+        transaction.id = blockchain.getTransactionCounter();
+        try {
+            transaction.sign(this.keys.getPrivateKey());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        blockchain.addTransaction(transaction);
+        return transaction;
+    }
+
 
     //@Override
     public void run() {
 
         Block returnBlock = null;
         try {
+            if (blockchain.getBalance(this.ID)>0) {
+                createTransaction();
+            }
             returnBlock = createBlock();
         } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 

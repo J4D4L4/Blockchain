@@ -3,6 +3,8 @@ package blockchain;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.Signature;
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -16,26 +18,37 @@ public class Blockchain implements Serializable {
     transient BlockDirector director;
     int difficulty = 0;
     //singleton instance
-    private static Blockchain instance = new Blockchain();
+    private static Blockchain instance;
+
+    static {
+        try {
+            instance = new Blockchain();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchProviderException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     Observer minerObservers;
     ReadWriteLock lock = new ReentrantReadWriteLock();
     List<Transaction> transactionList;
-    Map<Integer, User> userBC;
+    Map<Integer, Entity> entityBC;
     int transactionCounter;
     java.util.logging.Logger logger =  java.util.logging.Logger.getLogger(this.getClass().getName());
 
-    Blockchain(){
+    Blockchain() throws NoSuchAlgorithmException, NoSuchProviderException {
         this.listOfBlocks = new LinkedList<>();
         this.director = new BlockDirector();
         this.minerObservers = new Observer();
         this.transactionList = new ArrayList<>();
-        this.userBC = new HashMap<>();
+        this.entityBC = new HashMap<>();
         this.transactionCounter = 0;
         difficulty = 0;
     }
 
     //singleton functions
-    public static Blockchain getInstance() {
+    public static Blockchain getInstance() throws NoSuchAlgorithmException, NoSuchProviderException {
         if (instance == null) {
             instance = new Blockchain();
         }
@@ -44,7 +57,7 @@ public class Blockchain implements Serializable {
 
     public boolean checkAllTransactions(Block block) throws Exception {
         for (Transaction transaction : block.transactionList){
-            if(verifySignature(transaction, userBC.get(transaction.userID)))
+            if(!verifySignature(transaction, entityBC.get(transaction.userID)))
                 return false;
         }
         return true;
@@ -54,11 +67,7 @@ public class Blockchain implements Serializable {
         try {
             lock.writeLock().lock();
             if (listOfBlocks.size() > 0) {
-                logger.info("TChecking Hash: Zeros:"+HashUtil.startsWithXZero(block.hashBlock)+ "Difficulty: "+difficulty +", hash prev right: " +block.getHashPreviousBlock().equals(headBlock.getHashBlock()));
                 if (HashUtil.startsWithXZero(block.hashBlock) >= difficulty && block.getHashPreviousBlock().equals(headBlock.getHashBlock())) { //
-                    //block.transactionList = transactionList;
-                    //resetTransactionList();
-                    logger.info("TChecking Sig!");
                    if(!checkAllTransactions(block)  ) {
 
                            lock.writeLock().unlock();
@@ -72,7 +81,6 @@ public class Blockchain implements Serializable {
                        return false;
 
                    }
-                    logger.info("block was created");
                     listOfBlocks.add(block);
                     headBlock = block;
                     minerObservers.notify(Event.NEWBLOCK);
@@ -138,12 +146,23 @@ public class Blockchain implements Serializable {
 
     }
 
+    public int getBalance(int entityID) {
+
+        int received =this.listOfBlocks.stream().map(block -> block.transactionList).flatMap(Collection::stream).filter(transaction -> transaction.to == (entityID)).map(transaction -> transaction.amount).reduce(0,Integer::sum);
+        int send =  this.listOfBlocks.stream().map(block -> block.transactionList).flatMap(Collection::stream).filter(transaction -> transaction.from == (entityID)).map(transaction -> transaction.amount).reduce(0,Integer::sum);
+        int sumBalance = received - send;
+        return sumBalance;
+    }
+
     // verify user signature
-    private boolean verifySignature(Transaction data, User user) throws Exception {
+    boolean verifySignature(Transaction data, Entity entity) throws Exception {
         Signature sig = Signature.getInstance("SHA1withRSA");
-        sig.initVerify(user.keys.getPublicKey());
+        sig.initVerify(entity.keys.getPublicKey());
         sig.update(data.toString().getBytes());
         boolean returnVal = sig.verify(data.signature);
+
+        if(!returnVal){
+        }
         return  returnVal;
     }
 
@@ -154,9 +173,12 @@ public class Blockchain implements Serializable {
 
     public boolean allTransactionCountersHigher(Block block) {
 
-       if ( block.transactionList.stream().map( transaction -> transaction.id).min(Integer::compare).get() > headBlock.transactionList.stream().map(transaction -> transaction.id).max(Integer::compare).get())
-           return true;
-       else return false;
+        if(block.transactionList.size() != 0) {
+            if (block.transactionList.stream().map(transaction -> transaction.id).min(Integer::compare).get() > headBlock.transactionList.stream().map(transaction -> transaction.id).max(Integer::compare).get())
+                return true;
+            else return false;
+        }
+        else return true;
 
     }
 
@@ -194,6 +216,7 @@ public class Blockchain implements Serializable {
             this.headBlock = headBlock;
         }
     }
+
 
 
 }

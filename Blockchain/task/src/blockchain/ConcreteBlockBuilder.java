@@ -1,5 +1,6 @@
 package blockchain;
 
+import java.security.PrivateKey;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.LinkedList;
@@ -9,6 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class ConcreteBlockBuilder implements BlockBuilder {
 
     private Block block;
+    java.util.logging.Logger logger =  java.util.logging.Logger.getLogger(this.getClass().getName());
 
     ConcreteBlockBuilder(){
         block = new Block();
@@ -19,11 +21,14 @@ public class ConcreteBlockBuilder implements BlockBuilder {
         block.setTimestamp(new Date().getTime());
     }
 
-    @Override
-    public void buildListOfTransactions(List<Transaction> transactionList, String miner) {
-        this.block.transactionList = transactionList;
-        //this.block.transactionList.add(new Transaction(null,miner,100));
 
+
+    @Override
+    public void buildListOfTransactions(List<Transaction> transactionList, Transaction minerReward) throws Exception {
+        this.block.transactionList = transactionList;
+
+        this.block.transactionList.add(minerReward);
+        logger.info("Added Transaction? "+transactionList.size());
     }
 
 
@@ -98,7 +103,7 @@ public class ConcreteBlockBuilder implements BlockBuilder {
         block.timeNeededToCreate = time;
     }
 
-    public void addMinerRewarf(String miner){block.transactionList.add(new Transaction(null,miner,100)); }
+
 
 
 

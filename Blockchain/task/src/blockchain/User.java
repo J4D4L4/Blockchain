@@ -5,13 +5,20 @@ import java.util.concurrent.TimeUnit;
 public class User extends Entity implements Runnable{
     public Blockchain blockchain;
     public int ID;
-    PublicPrivateKeys keys;
+    //PublicPrivateKeys keys;
     User(){
 
     }
 
     public Transaction createTransaction(){
-        Transaction transaction = new Transaction(ID+" imessage 1",this);
+        Transaction transaction = new Transaction(this.ID, blockchain.entityBC.keySet().stream().findAny().get(),this.ID,100);
+
+        transaction.id = blockchain.getTransactionCounter();
+        try {
+            transaction.sign(this.keys.getPrivateKey());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         blockchain.addTransaction(transaction);
         return transaction;
     }
@@ -19,23 +26,16 @@ public class User extends Entity implements Runnable{
     public void run() {
 
             for(int run = 0; run<5; run++) {
-                Transaction retunrTransaction = createTransaction();
-                retunrTransaction.id = blockchain.getTransactionCounter();
-                try {
-                    retunrTransaction.sign(keys.getPrivateKey());
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+                if (blockchain.getBalance(this.ID)>0) {
+                    createTransaction();
                 }
+
                 try {
-                    TimeUnit.MILLISECONDS.sleep(2000);
+                    TimeUnit.MILLISECONDS.sleep(200);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
-
-
-
-
 
     }
 }

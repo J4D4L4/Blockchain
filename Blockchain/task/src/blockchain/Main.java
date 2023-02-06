@@ -2,10 +2,7 @@ package blockchain;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -25,8 +22,11 @@ public class Main {
         int minersToCreate = 5;
         List<Block> createdBlocks = new ArrayList<>();
 
-        ExecutorService executor = Executors.newFixedThreadPool(10);
+        ExecutorService executor = Executors.newFixedThreadPool(4);
 
+        for (int amtMiner = 0; amtMiner < minersToCreate; amtMiner++){
+            minerList.add(blockchain.director.makeMiner(blockchain));
+        }
 
         //System.out.print("Enter how many zeros the hash must start with: ");
         //int nrOfZeroes = scanner.nextInt();
@@ -35,10 +35,13 @@ public class Main {
         while (blockchain.listOfBlocks.size()<amountOfBlocksToCreate) {
             User user = blockchain.director.makeUser();
             executor.submit(user);
-            Miner miner = blockchain.director.makeMiner(blockchain);
-            minerList.add(miner);
-            executor.submit(miner);
-            executor.awaitTermination(200, TimeUnit.MILLISECONDS);
+            //Miner miner = blockchain.director.makeMiner(blockchain);
+            //Miner miner1 = blockchain.director.makeMiner(blockchain);
+            Random rand = new Random();
+            int randomID = rand.nextInt(minerList.size()-1);
+            executor.submit(minerList.get(randomID));
+            //executor.submit(miner);
+            //executor.awaitTermination(200, TimeUnit.MILLISECONDS);
 
         }
 

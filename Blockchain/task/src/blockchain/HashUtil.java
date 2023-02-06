@@ -2,6 +2,8 @@ package blockchain;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 
 public class HashUtil {
 
@@ -26,5 +28,12 @@ public class HashUtil {
     public static int startsWithXZero(String string) {
         int length = string.length() - string.replaceAll("^0+", "").length();
         return length;
+    }
+
+    public static PublicPrivateKeys createKeys() throws NoSuchAlgorithmException, NoSuchProviderException {
+        PublicPrivateKeys keys = new PublicPrivateKeys(1024);
+        keys.createKeys();
+        return keys;
+
     }
 }

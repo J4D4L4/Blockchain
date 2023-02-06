@@ -25,6 +25,7 @@ public class Block {
 
     int timeNeededToCreate;
     boolean interrupt;
+    java.util.logging.Logger logger =  java.util.logging.Logger.getLogger(this.getClass().getName());
 
     //Block parameters are set through the ConcreteBlockBuilder
     Block(){
@@ -53,10 +54,14 @@ public class Block {
         System.out.printf("Hash of the block:%n%s%n",getHashBlock());
         System.out.printf("Block data:");
         if(transactionList.size() == 0)
-            System.out.println("No messages");
+            System.out.println("No transactions");
         else {
+            logger.info("Transaction amt: "+ transactionList.size());
             for (Transaction transaction : transactionList) {
-                System.out.printf("%s%n", transaction.message);
+                if(transaction.from != -1) {
+                    System.out.printf("%s sent %d VC to %s%n", transaction.from, transaction.amount, transaction.to);
+                }
+                else System.out.printf("Blockreward sent %d VC to %s%n",  transaction.amount, transaction.to);
             }
         }
         System.out.printf("Block was generating for %d seconds%n", getTimeNeededToCreate() );
