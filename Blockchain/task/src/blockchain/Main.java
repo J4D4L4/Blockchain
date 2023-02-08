@@ -48,7 +48,7 @@ public class Main {
             randomID = rand.nextInt(minerList.size()-1);
             executor.submit(minerList.get(randomID));
             //executor.submit(miner);
-            //executor.awaitTermination(200, TimeUnit.MILLISECONDS);
+            executor.awaitTermination(200, TimeUnit.MILLISECONDS);
 
         }
 
@@ -66,8 +66,18 @@ public class Main {
 
     public static void print(LinkedList<Block> blockList){
 
-        for (Block block : blockList){
+        /*for (Block block : blockList){
 
+            block.printBlock();
+
+        for (Iterator<Block> iterator = blockList.iterator(); iterator.hasNext();) {
+            Block block = iterator.next();
+            block.printBlock();
+        } }*/
+
+        for(int blockNr = 0; blockNr < blockList.size(); blockNr++) {
+
+            Block block = blockList.get(blockNr);
             block.printBlock();
         }
     }
