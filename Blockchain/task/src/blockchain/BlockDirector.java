@@ -11,6 +11,7 @@ public class BlockDirector {
     UserBuilder userBulder;
     PublicPrivateKeys keys;
     int entityIdCounter;
+
     BlockDirector() throws NoSuchAlgorithmException, NoSuchProviderException {
 
         blockBuilder = new ConcreteBlockBuilder();
@@ -20,7 +21,7 @@ public class BlockDirector {
         entityIdCounter = 0;
     }
 
-    public Block makeBlock(Block previousBlock, int nrOfZero, Blockchain blockchain, Miner miner,Transaction minerReward) throws Exception {
+    public Block makeBlock(Block previousBlock, int nrOfZero, Blockchain blockchain, Miner miner, Transaction minerReward) throws Exception {
         LocalTime start = LocalTime.now();
         blockBuilder.reset();
         blockBuilder.buildTimeStamp();
@@ -28,11 +29,11 @@ public class BlockDirector {
         blockBuilder.buildListOfTransactions(blockchain.transactionList, minerReward);
         blockchain.resetTransactionList();
         //blockBuilder.addMinerRewarf(miner);
-        blockBuilder.buildPreviousBlock(blockchain.headBlock);
-        blockBuilder.buildID(blockchain.headBlock);
+        blockBuilder.buildPreviousBlock(Blockchain.headBlock);
+        blockBuilder.buildID(Blockchain.headBlock);
         blockBuilder.buildHash(nrOfZero);
         LocalTime end = LocalTime.now();
-        blockBuilder.setTimeNeededToCreate(end.toSecondOfDay()-start.toSecondOfDay());
+        blockBuilder.setTimeNeededToCreate(end.toSecondOfDay() - start.toSecondOfDay());
         blockBuilder.buildDifficulty(nrOfZero);
         return blockBuilder.getBlock();
 

@@ -2,21 +2,27 @@ package blockchain;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
 import java.util.List;
 
 public interface BlockBuilder {
 
-    public void buildTimeStamp();
-    public void buildListOfTransactions(List<Transaction> transactionList, Transaction minerReward) throws Exception;
-    public void buildHashOfPreviousBlock(Block previousBlock);
-    public Block getBlock();
-    public void buildHash(int numberOfZero);
-    public void buildID(Block previousBlock);
-    public void buildPreviousBlock(Block previousBlock);
-    public void setTimeNeededToCreate(int time);
-    public void buildBlockchain() throws NoSuchAlgorithmException, NoSuchProviderException;
+    void buildTimeStamp();
 
+    void buildListOfTransactions(List<Transaction> transactionList, Transaction minerReward) throws Exception;
+
+    void buildHashOfPreviousBlock(Block previousBlock);
+
+    Block getBlock();
+
+    void buildHash(int numberOfZero);
+
+    void buildID(Block previousBlock);
+
+    void buildPreviousBlock(Block previousBlock);
+
+    void setTimeNeededToCreate(int time);
+
+    void buildBlockchain() throws NoSuchAlgorithmException, NoSuchProviderException;
 
 
 }

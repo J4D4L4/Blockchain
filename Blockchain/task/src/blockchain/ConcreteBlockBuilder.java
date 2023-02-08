@@ -2,19 +2,16 @@ package blockchain;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
-import java.time.LocalTime;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ConcreteBlockBuilder implements BlockBuilder {
 
+    java.util.logging.Logger logger = java.util.logging.Logger.getLogger(this.getClass().getName());
     private Block block;
-    java.util.logging.Logger logger =  java.util.logging.Logger.getLogger(this.getClass().getName());
 
-    ConcreteBlockBuilder(){
+    public ConcreteBlockBuilder() {
         block = new Block();
     }
 
@@ -22,7 +19,6 @@ public class ConcreteBlockBuilder implements BlockBuilder {
     public void buildTimeStamp() {
         block.setTimestamp(new Date().getTime());
     }
-
 
 
     @Override
@@ -33,13 +29,11 @@ public class ConcreteBlockBuilder implements BlockBuilder {
     }
 
 
-
     @Override
     public void buildHashOfPreviousBlock(Block previousBlock) {
-        if(previousBlock != null) {
+        if (previousBlock != null) {
             block.setHashPreviousBlock(previousBlock.getHashBlock());
-        }
-        else {
+        } else {
             block.setHashPreviousBlock("0");
         }
 
@@ -55,44 +49,41 @@ public class ConcreteBlockBuilder implements BlockBuilder {
         String prelimHash;
 
         while (true) {
-            block.magicNumber = ThreadLocalRandom.current().nextInt(0,  99999999+ 1);
+            block.magicNumber = ThreadLocalRandom.current().nextInt(0, 99999999 + 1);
             prelimHash = HashUtil.applySha256(block.toString());
             int startsWithZeros = prelimHash.length() - prelimHash.replaceAll("^0+", "").length();
-            if (startsWithZeros>=numberOfZero) break;
+            if (startsWithZeros >= numberOfZero) break;
         }
 
         block.setHashBlock(prelimHash);
     }
 
-    public void reset(){
+    public void reset() {
         block = new Block();
     }
 
     public void buildID(Block previousBlock) {
 
-        if(previousBlock != null) {
-            block.setUniqueID(""+(Integer.parseInt(previousBlock.getUniqueID())+1));
+        if (previousBlock != null) {
+            block.setUniqueID("" + (Integer.parseInt(previousBlock.getUniqueID()) + 1));
+        } else {
+            block.setUniqueID("" + 1);
         }
-        else {
-            block.setUniqueID(""+1);
-        }
-
-        ;
 
 
     }
 
     @Override
     public void buildPreviousBlock(Block previousBlock) {
-        if(previousBlock == null){
+        if (previousBlock == null) {
             block.setHashPreviousBlock("0");
-        }
-        else {
+        } else {
             block.setHashPreviousBlock(HashUtil.applySha256(previousBlock.toString()));
         }
 
         block.setPreviousBlock(previousBlock);
     }
+
     public void buildDifficulty(int difficulty) {
 
         block.setDiffcultyWhileCreated(difficulty);
@@ -100,13 +91,13 @@ public class ConcreteBlockBuilder implements BlockBuilder {
 
     }
 
-    public void setTimeNeededToCreate(int time){
+    public void setTimeNeededToCreate(int time) {
         block.timeNeededToCreate = time;
     }
 
     @Override
     public void buildBlockchain() throws NoSuchAlgorithmException, NoSuchProviderException {
-        block.blockchain = Blockchain.getInstance();
+        block.blockchain = Blockchain.getBlockchainInstance();
     }
 
 

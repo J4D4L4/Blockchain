@@ -2,7 +2,7 @@ package blockchain;
 
 public abstract class Entity {
 
-    String name;
+    public String name;
     PublicPrivateKeys keys;
 
 }

@@ -2,7 +2,6 @@ package blockchain;
 
 
 import java.util.Random;
-import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 public class Miner extends Entity implements EventListener, Runnable {
@@ -10,11 +9,10 @@ public class Miner extends Entity implements EventListener, Runnable {
     public Blockchain blockchain;
     public int ID;
     boolean interrupt;
-    java.util.logging.Logger logger =  java.util.logging.Logger.getLogger(this.getClass().getName());
+    java.util.logging.Logger logger = java.util.logging.Logger.getLogger(this.getClass().getName());
 
     @Override
     public void update() {
-        return;
     }
 
     public Block createBlock() throws Exception {
@@ -22,31 +20,40 @@ public class Miner extends Entity implements EventListener, Runnable {
         while (true) {
 
             if (blockchain.listOfBlocks.size() == 0) {
-                Block newBlock = blockchain.director.makeBlock(null, blockchain.difficulty,blockchain, this, createMinerReward());
-
-                if (HashUtil.startsWithXZero(newBlock.hashBlock) >= blockchain.difficulty) {
-                    newBlock.createdByMiner = "" + ID;
-                    if (blockchain.addBlock(newBlock)) {
-                        return newBlock;
-                    } else return null;
-                }
+                return makeGenesisBlock();
             } else {
-                TimeUnit.MILLISECONDS.sleep(100);
-                Block newBlock = blockchain.director.makeBlock(blockchain.headBlock, blockchain.difficulty,blockchain, this, createMinerReward());
-
-                if (HashUtil.startsWithXZero(newBlock.hashBlock) >= blockchain.difficulty) {
-
-                    newBlock.createdByMiner = "" + ID;
-                    if (blockchain.addBlock(newBlock)) {
-                        return newBlock;
-                    } else return null;
-                }
+                return makeBlock();
 
             }
         }
     }
 
-    public Transaction createMinerReward(){
+    private Block makeGenesisBlock() throws Exception {
+        Block newBlock = blockchain.director.makeBlock(null, blockchain.difficulty, blockchain, this, createMinerReward());
+
+        if (HashUtil.startsWithXZero(newBlock.hashBlock) >= blockchain.difficulty) {
+            newBlock.createdByMiner = "" + ID;
+            if (blockchain.addBlock(newBlock)) {
+                return newBlock;
+            } else return null;
+        } else return null;
+
+    }
+
+    private Block makeBlock() throws Exception {
+        TimeUnit.MILLISECONDS.sleep(100);
+        Block newBlock = blockchain.director.makeBlock(Blockchain.headBlock, blockchain.difficulty, blockchain, this, createMinerReward());
+
+        if (HashUtil.startsWithXZero(newBlock.hashBlock) >= blockchain.difficulty) {
+
+            newBlock.createdByMiner = "" + ID;
+            if (blockchain.addBlock(newBlock)) {
+                return newBlock;
+            } else return null;
+        } else return null;
+    }
+
+    public Transaction createMinerReward() {
         Transaction transaction = new Transaction(-1, this.ID, this.ID, 100);
 
         transaction.id = blockchain.getTransactionCounter();
@@ -59,10 +66,10 @@ public class Miner extends Entity implements EventListener, Runnable {
         return transaction;
     }
 
-    public Transaction createTransaction(){
+    public Transaction createTransaction() {
         Random rand = new Random();
-        int randomID = rand.nextInt(blockchain.entityBC.size()-1);
-        Transaction transaction = new Transaction(this.ID, randomID,this.ID,100);
+        int randomID = rand.nextInt(blockchain.entityBC.size() - 1);
+        Transaction transaction = new Transaction(this.ID, randomID, this.ID, 100);
 
         transaction.id = blockchain.getTransactionCounter();
         try {
@@ -80,7 +87,7 @@ public class Miner extends Entity implements EventListener, Runnable {
 
         Block returnBlock = null;
         try {
-            if (blockchain.getBalance(this.ID)>0) {
+            if (blockchain.getBalance(this.ID) > 0) {
                 createTransaction();
             }
             returnBlock = createBlock();
@@ -93,8 +100,6 @@ public class Miner extends Entity implements EventListener, Runnable {
         if (returnBlock != null) {
 
         }
-
-
 
 
     }

@@ -2,16 +2,20 @@ package blockchain;
 
 import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.spec.InvalidKeySpecException;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MinerTest {
 
-    private Blockchain blockchain = Blockchain.getInstance();
+    private Blockchain blockchain = Blockchain.getBlockchainInstance();
     private Miner miner = blockchain.director.makeMiner(blockchain);
 
     public MinerTest() throws NoSuchAlgorithmException, NoSuchProviderException {
@@ -19,7 +23,7 @@ public class MinerTest {
 
     @Before
     public void setUp() throws NoSuchAlgorithmException, NoSuchProviderException {
-        blockchain = Blockchain.getInstance();
+        blockchain = Blockchain.getBlockchainInstance();
         miner = blockchain.director.makeMiner(blockchain);
         miner.blockchain = blockchain;
     }
@@ -37,7 +41,7 @@ public class MinerTest {
         Assertions.assertNotNull(transaction);
         Assertions.assertTrue(blockchain.verifySignature(transaction,miner));
         Assertions.assertEquals(-1, transaction.from);
-        Assertions.assertEquals(miner.name, transaction.to);
+        Assertions.assertEquals(miner.ID, transaction.to);
         assertEquals(miner.ID, transaction.userID);
         assertEquals(100, transaction.amount);
     }
@@ -46,9 +50,20 @@ public class MinerTest {
     public void testAddedMinerReward() throws Exception {
         miner.createBlock();
         miner.createBlock();
-        int size = blockchain.listOfBlocks.size();
         int moneyAmt = blockchain.getBalance(miner.ID);
         Assertions.assertTrue(moneyAmt>0);
 
+    }
+
+
+
+
+
+
+
+    @Test
+    public void testCreateTransaction() throws NoSuchAlgorithmException, InvalidKeySpecException {
+        Transaction transaction = miner.createTransaction();
+        assertNotNull(transaction);
     }
 }

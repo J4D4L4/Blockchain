@@ -1,19 +1,12 @@
 package blockchain;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
+
+import java.security.*;
 
 
 // used https://mkyong.com/java/java-digital-signatures-example/ as a example
 public class PublicPrivateKeys {
 
-    private KeyPairGenerator keyGen;
+    private final KeyPairGenerator keyGen;
     private KeyPair pair;
     private PrivateKey privateKey;
     private PublicKey publicKey;
@@ -36,7 +29,6 @@ public class PublicPrivateKeys {
     public PublicKey getPublicKey() {
         return this.publicKey;
     }
-
 
 
 }

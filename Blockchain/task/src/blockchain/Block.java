@@ -1,6 +1,5 @@
 package blockchain;
 
-import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,10 +16,10 @@ public class Block {
     int timeNeededToCreate;
     boolean interrupt;
     Blockchain blockchain;
-    java.util.logging.Logger logger =  java.util.logging.Logger.getLogger(this.getClass().getName());
+    java.util.logging.Logger logger = java.util.logging.Logger.getLogger(this.getClass().getName());
 
     //Block parameters are set through the ConcreteBlockBuilder
-    Block(){
+    Block() {
 
         transactionList = new LinkedList<>();
 
@@ -28,37 +27,37 @@ public class Block {
 
 
     //used to generate Hash of Block
-    public String toString(){
+    public String toString() {
 
-        String paramtersAsString = uniqueID+timestamp+hashPreviousBlock+transactionList.toString()+magicNumber;
+        String paramtersAsString = uniqueID + timestamp + hashPreviousBlock + transactionList.toString() + magicNumber;
         return paramtersAsString;
 
     }
 
     //Prints out block info for the Test requirement of HyperSkill
-    public void printBlock(){
+    public void printBlock() {
         System.out.println("Block:");
         System.out.printf("Created by: miner%s%n", getCreatedByMiner());
         System.out.printf("%s gets 100 VC%n", blockchain.entityBC.get(Integer.parseInt(getCreatedByMiner())).name);
-        System.out.printf("Id: %s%n",getUniqueID());
-        System.out.printf("Timestamp: %s%n",getTimestamp());
-        System.out.printf("Magic number: %s%n",getMagicNumber());
-        System.out.printf("Hash of the previous block:%n%s%n",getHashPreviousBlock());
-        System.out.printf("Hash of the block:%n%s%n",getHashBlock());
-        System.out.printf("Block data: ");
-        if(transactionList.size() == 0)
+        System.out.printf("Id: %s%n", getUniqueID());
+        System.out.printf("Timestamp: %s%n", getTimestamp());
+        System.out.printf("Magic number: %s%n", getMagicNumber());
+        System.out.printf("Hash of the previous block:%n%s%n", getHashPreviousBlock());
+        System.out.printf("Hash of the block:%n%s%n", getHashBlock());
+        System.out.print("Block data: ");
+        if (transactionList.size() == 0)
             System.out.println("No transactions");
         else {
             for (Transaction transaction : transactionList) {
-                if(transaction.from != -1) {
+                if (transaction.from != -1) {
                     System.out.printf("%n%s sent %d VC to %s", blockchain.entityBC.get(transaction.from).name, transaction.amount, blockchain.entityBC.get(transaction.to).name);
                 }
                 //else System.out.printf("Blockreward sent %d VC to %s%n",  transaction.amount, blockchain.entityBC.get(transaction.to));
             }
         }
-        System.out.printf("%nBlock was generating for %d seconds%n", getTimeNeededToCreate() );
-        System.out.printf("N was increased to %s%n", getDiffcultyWhileCreated()+1 );
-        System.out.println("");
+        System.out.printf("%nBlock was generating for %d seconds%n", getTimeNeededToCreate());
+        System.out.printf("N was increased to %s%n", getDiffcultyWhileCreated() + 1);
+        System.out.println();
     }
 
     //Getter and Setter
@@ -109,6 +108,7 @@ public class Block {
     public void setPreviousBlock(Block previousBlock) {
         this.previousBlock = previousBlock;
     }
+
     public int getMagicNumber() {
         return magicNumber;
     }

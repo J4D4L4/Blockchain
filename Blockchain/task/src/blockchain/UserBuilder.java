@@ -5,24 +5,23 @@ import java.security.NoSuchProviderException;
 
 public class UserBuilder {
 
-    private User user;
     int idCounter = 1;
+    private User user;
 
     public UserBuilder() {
         this.reset();
     }
 
     public void setBlockchain() throws NoSuchAlgorithmException, NoSuchProviderException {
-        user.blockchain = Blockchain.getInstance();
-        user.blockchain.entityBC.put(user.ID,user);
+        user.blockchain = Blockchain.getBlockchainInstance();
+        user.blockchain.entityBC.put(user.ID, user);
 
     }
 
 
-
     public void setID(int id) {
         user.ID = id;
-        user.name = "user"+user.ID;
+        user.name = "user" + user.ID;
         //idCounter++;
     }
 
@@ -30,7 +29,6 @@ public class UserBuilder {
 
         user.keys = HashUtil.createKeys();
     }
-
 
 
     public void reset() {

@@ -5,15 +5,15 @@ import java.security.NoSuchProviderException;
 
 public class MinerBuilder {
 
-    private Miner miner;
     int idCounter = 1;
+    private Miner miner;
 
     public MinerBuilder() {
         this.reset();
     }
 
     public void setBlockchain() throws NoSuchAlgorithmException, NoSuchProviderException {
-        miner.blockchain = Blockchain.getInstance();
+        miner.blockchain = Blockchain.getBlockchainInstance();
         miner.blockchain.entityBC.put(miner.ID, miner);
 
     }
@@ -28,7 +28,7 @@ public class MinerBuilder {
 
     public void setID(int id) {
         miner.ID = id;
-        miner.name ="miner"+miner.ID;
+        miner.name = "miner" + miner.ID;
 
     }
 
