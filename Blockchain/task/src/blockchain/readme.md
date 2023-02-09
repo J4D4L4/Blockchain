@@ -29,3 +29,5 @@ together.
   identifier in the block in which miners looking for the magic number. Also, when validating the blockchain you should
   check that every message has an identifier greater than the maximum identifier of the previous block.
     - Implemented Public -Private key for Users
+- Stage 6: A miner who creates a new block should be awarded some virtual money, for example, 100 virtual coins. This can be remembered in the blockchain if the block stores information about the miner who created this block. Of course, this message also should be proved, so the miner adds this information to the blockchain before starting a search for a magic number.
+  In this stage, you need to implement transactions like this instead of text messages like in the previous stage. For testing reasons you can assume that everyone starts with 100 virtual coins, not 0. But as described above, all the money of the blockchain is initially awards for creating blocks of the blockchain.
